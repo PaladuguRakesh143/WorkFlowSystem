@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "6a9965bd-ff14-44fe-a76c-b9b1c6a531d9",
+		"name": "WF-3 USRetailBankingWorkflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "USRetail Stage 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							" ",
+							"// Log the uniqueId to the Postman console for debugging",
+							"console.log(\"Unique ID captured:\", jsonData.transactionId);",
+							" ",
+							"// Store the 'uniqueId' from the response in a global variable",
+							"pm.globals.set(\"uniqueId\", jsonData.transactionId);",
+							"console.log(\"Unique ID stored globally:\", pm.globals.get(\"uniqueId\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 1,\n    \"input\": {\n        \"fullName\": \"John\",\n        \"dateOfBirth\": \"01 Jan-1995\",\n        \"socialSecurityNumber\": 12334567890,\n        \"email\": \"John@email.com\",\n        \"phone\": \"+199889729273\",\n        \"initialDeposit\": \"2000\",\n        \"kycDocuments\": \"Passport\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "USRetails stage 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 1,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"accountType\": \"Savings\",\n        \"initialDeposit\": 230,\n        \"accountPreferences\": \"Savings\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetail stage-3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"requestedAction\":\"loanApplication\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetails stage 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"sourceAccount\":\"1027930739373\",\n        \"destinationAccount\":\"1794793793730\",\n        \"amount\":\"234\",\n        \"transactionDate\":\"18 Sep,20204\",\n        \"transactionType\":\"Fund Transfer\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetail stage 5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"accountNumber\":\"1027930739373\",\n        \"billId\":\"Trans-1794793793730\",\n        \"amount\":\"234\",\n        \"dueDate\":\"30 Sep,20204\",\n        \"paymentMethod\":\"Credit card\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetail stage 6",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"loanType\":\"Housing Loan\",\n        \"term\":\"2\",\n        \"loanAmount\":\"23400\",\n        \"incomeProof\":\"Income cerificate\",\n        \"creditScore\":700\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetail stage 7",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"loanId\":\"LI1234\",\n        \"disbursementAmount\":\"2000\",\n        \"disbursementDate\":\"22 nov-2024\",\n        \"disbursementAccount\":\"123456789829\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetails stage 8",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {\n        \"transactionId\": \"{{uniqueId}}\",\n        \"accountNumber\":\"3737739887\",\n        \"updateType\":\"Name\",\n        \"updateDetails\":\"John\",\n        \"customerRequest\":\"Service Request\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetails Stage 9",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {  \n        \"transactionId\": \"{{uniqueId}}\",\n        \"issueType\":\"Payment issue\",\n        \"issueDetails\":\"Bill Payment is failed\",\n        \"preferredContactMethod\":\"Phone call\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UsRetail Stage 10",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workflowId\": 3,\n    \"input\": {  \n        \"transactionId\": \"{{uniqueId}}\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

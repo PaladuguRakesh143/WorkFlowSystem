@@ -1,0 +1,28 @@
+{
+	"info": {
+		"_postman_id": "dd702002-45f5-4625-ab13-62acfa5b4b9c",
+		"name": "Version API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "App version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/version",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"version"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

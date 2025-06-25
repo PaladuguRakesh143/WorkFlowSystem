@@ -1,0 +1,2 @@
+# Ignore Maven target directory (which contains compiled classes)
+target/

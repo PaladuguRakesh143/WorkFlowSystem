@@ -1,0 +1,144 @@
+{
+	"info": {
+		"_postman_id": "e8035159-6573-4b09-99d7-6ec3dc868448",
+		"name": "WF 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "employee stage 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							" \r",
+							"// Log the uniqueId to the Postman console for debugging\r",
+							"console.log(\"Unique ID captured:\", jsonData.transactionId);\r",
+							" \r",
+							"// Store the 'uniqueId' from the response in a global variable\r",
+							"pm.globals.set(\"uniqueId\", jsonData.transactionId);\r",
+							"console.log(\"Unique ID stored globally:\", pm.globals.get(\"uniqueId\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"workflowId\":2,\r\n  \"input\":{\r\n  \"applicantName\": \"John Doe\",\r\n  \"resume\": \"https://example.com/resume/johndoe.pdf\",\r\n  \"position\": \"Software Engineer\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employee stage 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"workflowId\":2,\r\n  \"input\":{\r\n  \"transactionId\": \"{{uniqueId}}\",\r\n  \"interviewDate\": \"2024-09-15\",\r\n  \"interviewTime\": \"10:00 AM\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employee stage 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"workflowId\":2,\r\n  \"input\":{\r\n  \"transactionId\": \"{{uniqueId}}\",\r\n  \"interviewerName\": \"Alice Smith\",\r\n  \"feedback\": \"Candidate demonstrated strong technical skills.\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employee stage 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"workflowId\":2,\r\n  \"input\":{\r\n  \"transactionId\": \"{{uniqueId}}\",\r\n  \"offerDetails\": \"Offer for Software Engineer position at $100,000 annually.\",\r\n  \"acceptanceStatus\": \"Accepted\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/execute",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"execute"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,70 @@
+{
+	"info": {
+		"_postman_id": "41a840d8-ff40-4e0b-9dda-6b7c4539dda5",
+		"name": "Workflow Engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add workflow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n    \"USRetailBankingWorkflow\": {\r\n        \"customerOnboarding\": {\r\n            \"stage\": 1,\r\n            \"requestBody\": [\"fullName\", \"dateOfBirth\", \"socialSecurityNumber\", \"email\", \"phone\", \"initialDeposit\", \"kycDocuments\"],\r\n            \"methodName\": \"verifyKYC\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\r\n                            \"kycStatus\": \"verified\",\r\n                            \"status\": \"success\"\r\n                        },\r\n                        \"target\": 2\r\n                    },\r\n                    {\r\n                        \"condition\": {\r\n                            \"kycStatus\": \"failed\",\r\n                            \"status\": \"failed\"\r\n                        },\r\n                        \"target\": 1\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"accountOpening\": {\r\n            \"stage\": 2,\r\n            \"requestBody\": [\"accountType\", \"initialDeposit\", \"accountPreferences\", \"transactionId\"],\r\n            \"methodName\": \"openAccount\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"initialDeposit\": {\"$gte\": 50},\r\n                                        \"status\":\"Deposit GTE 50\"\r\n                                        },\r\n                        \"target\": 3\r\n                    },\r\n                    {\r\n                        \"condition\": {\"initialDeposit\": {\"$lt\": 50},\r\n                                        \"status\":\"Deposit LT 50\"},\r\n                        \"target\": 2\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"actionDecision\": {\r\n            \"stage\": 3,\r\n            \"requestBody\": [\"transactionId\", \"requestedAction\"],\r\n            \"methodName\": \"decideAction\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"requestedAction\": \"fundTransfer\",\r\n                                        \"status\":\"fundTransfer\"},\r\n                        \"target\": 4\r\n                    },\r\n                    {\r\n                        \"condition\": {\"requestedAction\": \"billPayment\",\r\n                                        \"status\":\"billPayment\"},\r\n                        \"target\": 5\r\n                    },\r\n                    {\r\n                        \"condition\": {\"requestedAction\": \"loanApplication\",\r\n                                        \"status\":\"loanApplication\"},\r\n                        \"target\": 6\r\n                    },\r\n                    {\r\n                        \"condition\": {\"requestedAction\": \"accountManagement\",\r\n                                        \"status\":\"accountManagement\"},\r\n                        \"target\": 8\r\n                    },\r\n                    {\r\n                        \"condition\": {\"requestedAction\": \"customerSupport\",\r\n                                        \"status\":\"customerSupport\"},\r\n                        \"target\": 9\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"fundTransfer\": {\r\n            \"stage\": 4,\r\n            \"requestBody\": [\"transactionId\",\"sourceAccount\", \"destinationAccount\", \"amount\", \"transactionDate\", \"transactionType\"],\r\n            \"methodName\": \"processTransfer\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"transactionStatus\": \"success\",\r\n                                        \"status\":\"success\"},\r\n                        \"target\": 10\r\n                    },\r\n                    {\r\n                        \"condition\": {\"transactionStatus\": \"failed\",\r\n                                        \"status\":\"failed\"},\r\n                        \"target\": 4\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"billPayment\": {\r\n            \"stage\": 5,\r\n            \"requestBody\": [\"transactionId\",\"accountNumber\", \"billId\", \"amount\", \"dueDate\", \"paymentMethod\"],\r\n            \"methodName\": \"processBillPayment\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"paymentStatus\": \"completed\",\r\n                                        \"status\":\"completed\"},\r\n                        \"target\": 10\r\n                    },\r\n                    {\r\n                        \"condition\": {\"paymentStatus\": \"failed\",\r\n                                        \"status\":\"failed\"},\r\n                        \"target\": 5\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"loanApplication\": {\r\n            \"stage\": 6,\r\n            \"requestBody\": [\"transactionId\", \"loanType\", \"loanAmount\", \"term\", \"incomeProof\", \"creditScore\"],\r\n            \"methodName\": \"processLoanApplication\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"creditScore\": {\"$gte\": 700},\r\n                                        \"status\":\"CreditScore GTE 700\"},\r\n                        \"target\": 7\r\n                    },\r\n                    {\r\n                            \"condition\": {\"creditScore\": {\"$lt\": 700},\r\n                                            \"status\":\"CreditScore LT 50\"},\r\n                        \"target\": 6\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"loanDisbursement\": {\r\n            \"stage\": 7,\r\n            \"requestBody\": [\"transactionId\",\"loanId\", \"disbursementAmount\", \"disbursementDate\", \"disbursementAccount\"],\r\n            \"methodName\": \"disburseLoan\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"disbursementStatus\": \"completed\",\r\n                                        \"status\":\"completed\"},\r\n                        \"target\": 10\r\n                    },\r\n                    {\r\n                        \"condition\": {\"disbursementStatus\": \"pending\",\r\n                                        \"status\":\"pending\"},\r\n                        \"target\": 7\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"accountManagement\": {\r\n            \"stage\": 8,\r\n            \"requestBody\": [\"transactionId\",\"accountNumber\", \"updateType\", \"updateDetails\", \"customerRequest\"],\r\n            \"methodName\": \"updateAccountDetails\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"updateStatus\": \"success\",\r\n                                        \"status\":\"success\"},\r\n                        \"target\": 10\r\n                    },\r\n                    {\r\n                        \"condition\": {\"updateStatus\": \"failed\",\r\n                                        \"status\":\"failed\"},\r\n                        \"target\": 8\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"customerSupport\": {\r\n            \"stage\": 9,\r\n            \"requestBody\": [\"transactionId\", \"issueType\", \"issueDetails\", \"preferredContactMethod\"],\r\n            \"methodName\": \"resolveIssue\",\r\n            \"decisionJson\": {\r\n                \"outgoing\": [\r\n                    {\r\n                        \"condition\": {\"issueResolved\": \"Completed\",\r\n                                        \"status\":\"Completed\"},\r\n                        \"target\": 10\r\n                    },\r\n                    {\r\n                        \"condition\": {\"issueResolved\": \"Failed\",\r\n                                        \"status\":\"Failed\"},\r\n                        \"target\": 9\r\n                    }\r\n                ]\r\n            }\r\n        },\r\n        \"completion\": {\r\n            \"stage\": 10,\r\n            \"requestBody\": [\"transactionId\"],\r\n            \"description\": \"All processes completed successfully. The customer action has been fulfilled.\",\r\n            \"nextSteps\": \"None\"\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/saveWorkflowConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"saveWorkflowConfig"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get workflow info",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"workflowId\":1,\r\n    \"stageId\":4,\r\n    \"transactionId\":\"TXNID0832504714\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/workflow/info",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"workflow",
+						"info"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
